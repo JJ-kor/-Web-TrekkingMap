@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trekking Map: addition</title>
+    <!-- icon -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css">
+    <!-- CSS only -->
+    <link th:href="@{/css/bootstrap.min.css}" href="../../static/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="d-flex flex-column m-3">
+        <!-- search -->
+        <div class="d-flex justify-content-center">
+            <input class="form-control me-1" type="text" style="width:70%; display:inline-flex">
+            <button class="btn border"><i class="bi bi-search"></i></button>
+        </div>
+
+        <!-- addition -->
+        <div class="d-flex justify-content-center m-3">
+            <form>
+                <div class="mb-2">
+                    <label style="width:30%;">둘레길명: </label>
+                    <input class="form-control" type="text" style="width: 50%; display:inline">
+                </div>
+                <div class="mb-2">
+                    <label style="width:30%;">시작지점: </label>
+                    <input class="form-control" type="text" style="width: 50%; display:inline">
+                </div>
+                <div class="mb-2">
+                    <label style="width:30%;">도착지점: </label>
+                    <input class="form-control" type="text" style="width: 50%; display:inline">
+                </div>
+                <div class="mb-2">
+                    <label style="width:30%;">거리: </label>
+                    <input class="form-control" type="text" style="width: 50%; display:inline">
+                </div>
+                <div>좌표</div>
+                <div id="coords">
+                    <div class="coord">
+                        <span class="coord_num">예시. </span>
+                        <span class="coord_lat">위도</span>
+                        <span> / </span>
+                        <span class="coord_lag">경도</span>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- button -->
+        <div class="d-flex justify-content-center">
+            <button type="button" class="btn btn-outline-primary m-2">초기화</button>
+            <button type="button" class="btn btn-outline-primary m-2">저장하기</button>
+        </div>
+    </div>
+</body>
+<!-- JavaScript Bundle with Popper -->
+<script th:src="@{/js/bootstrap.min.js}" src="../../static/js/bootstrap.min.js"></script>
+<!-- Naver Map -->
+<script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=1ii3n95wii"></script>
+<script>
+</script>
+
+</html>

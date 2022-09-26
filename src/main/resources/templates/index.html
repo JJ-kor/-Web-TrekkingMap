@@ -11,95 +11,107 @@
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css">
 	<!-- CSS only -->
 	<link th:href="@{/css/bootstrap.min.css}" href="../static/css/bootstrap.min.css" rel="stylesheet">
+	<style>
+		#sub_sidebar {
+			position: relative;
+			z-index: 100;
+			float: left;
+			box-shadow: 3px 3px 3px #d8d8d8;
+			-webkit-transition: width 0.5s ease-in-out;
+			-moz-transition: width 0.5s ease-in-out;
+			-o-transition: width 0.5s ease-in-out;
+			transition: width 0.5s ease-in-out;
+		}
+
+		#btn_toggling {
+			position: relative;
+			left: 18px;
+			z-index: 10000;
+		}
+	</style>
 </head>
 
 <body>
 	<div class="d-flex">
 		<!-- sidebar -->
-		<div class="d-flex flex-column flex-shrink-0 bg-light vh-100 justify-content-between pb-5"
+		<div class="d-flex flex-column flex-shrink-0 bg-light vh-100 border justify-content-between"
 			style="width: 4.5rem; font-size: 30px;">
 			<!-- top -->
 			<div>
 				<ul class="nav nav-pills flex-column text-center">
+					<!-- main -->
 					<li>
-						<a href="#" class="nav-link border-bottom"><img src="../static/images/logo.png"
-								style="width:50px;"></a>
-						</a>
+						<a href="#" class="nav-link border-bottom" id="btn_main"><img th:src="@{/images/logo.png}"
+								src="../static/images/logo.png" style="width:30px;"></a>
+					</li>
+
+					<!-- profile -->
 					<li>
-						<a href="#" class="nav-link border-bottom"><i class="bi bi-person"></i></a>
-						</a>
+						<a href="#" class="nav-link link-dark border-bottom" id="btn_profile"><i
+								class="bi bi-person"></i></a>
+					</li>
+
+					<!-- addition -->
+					<li>
+						<a href="#" class="nav-link link-dark border-bottom" id="btn_addition"><i
+								class="bi bi-plus"></i></a>
+					</li>
+
+					<!-- modification -->
+					<li>
+						<a href="#" class="nav-link link-dark border-bottom" id="btn_mod"><i class="bi bi-save"></i></a>
+					</li>
 				</ul>
 			</div>
 
 			<!-- down -->
 			<div>
 				<ul class="nav nav-pills flex-column text-center">
+					<!-- selecting languages -->
 					<li>
-						<!-- selecting languages -->
-						<a href="#" class="nav-link border-bottom"><i class="bi bi-translate"></i></a>
-						</a>
+						<a href="#" class="nav-link link-dark border-bottom border-top" id="btn_lan"><i
+								class="bi bi-translate"></i></a>
 					</li>
+
+					<!-- notice -->
 					<li>
-						<!-- notice -->
-						<a href="#" class="nav-link border-bottom text-decoration-none"><i
-								class="text-decoration-nonebi bi-exclamation-triangle"></i></a>
+						<a href="#" class="nav-link link-dark border-bottom" id="btn_notice"><i
+								class="bi bi-exclamation-triangle"></i></a>
 					</li>
+
+					<!-- opinion -->
 					<li>
-						<!-- opinion -->
-						<a href="#" class="nav-link border-bottom"><i class="bi bi-send"></i></a>
+						<a href="#" class="nav-link link-dark border-bottom" id="btn_opinion"><i
+								class="bi bi-send"></i></a>
 					</li>
+
+					<!-- etc -->
 					<li>
-						<!-- terms -->
-						<a href="#" class="nav-link border-bottom"><i class="bi bi-file-earmark-text"></i></a>
+						<a href="#" class="nav-link link-dark border-bottom" id="btn_etc"><i
+								class="bi bi-three-dots"></i></a>
 					</li>
 				</ul>
 			</div>
 		</div>
 
-		<!-- sub_sidebar-->
-		<div class="d-flex flex-column bg-light vh-100" style="width: 20rem;">
-			<!-- search -->
-			<div>
-				<input class="form-control mt-3 ms-3" type="text" style="width:70%;">
-				<button class="btn"><i class="bi bi-search"></i></button>
-			</div>
-
-			<!-- detail -->
-			<div>
-
-			</div>
+		<!-- sub_sidebar -->
+		<div class="opened d-flex flex-column bg-light vh-100" id="sub_sidebar" style="width: 40rem;">
+			<iframe class="vh-100" th:src="@{/main}" src="../templates/sub_sidebar/main.html">
+			</iframe>
 		</div>
 
 		<!-- sub_sub_sidebar -->
-		<div>
-			<!-- photos -->
-			<div>
+		<div id="sub_sub_sidebar">
+		</div>
 
-			</div>
-			<!-- detail -->
-			<div>
-
-			</div>
-			<!-- isCompleted -->
-			<div>
-
-			</div>
-
-			<!-- auth -->
-			<div>
-
-			</div>
-
-			<!-- viewing other photos -->
-			<div>
-
-			</div>
+		<!-- hiding button -->
+		<div class="d-flex justify-content-end align-items-center" style="width:0px;">
+			<button class="bg-light border p-0" id="btn_toggling"><i class="bi bi-caret-left"></i></button>
 		</div>
 
 		<!-- map -->
-
 		<div class="d-flex vw-100">
-			<div id="map" style="width:100%;height:100%"></div>
+			<div id="map" style="width:100%; height:100%"></div>
 		</div>
 
 	</div>
@@ -109,7 +121,56 @@
 <!-- Naver Map -->
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=1ii3n95wii"></script>
 <script>
+	clickSidebar();
+	function clickSidebar() {
+		const btnMain = document.querySelector('#btn_main');
+		const btnProfile = document.querySelector('#btn_profile');
+		const btnAddtion = document.querySelector('#btn_addition');
+		const btnMod = document.querySelector('#btn_mod');
+		const btnLan = document.querySelector('#btn_lan');
+		const btnNotice = document.querySelector('#btn_notice');
+		const btnOpinion = document.querySelector('#btn_opinion');
+		const btnEtc = document.querySelector('#btn_etc');
+
+		const subSidebar = document.querySelector('#sub_sidebar');
+
+		btnMain.addEventListener('click', function () {
+			subSidebar.innerHTML = '<iframe class="vh-100" src="/main"></iframe>';
+		});
+
+		btnProfile.addEventListener('click', function () {
+			alert('프로필 클릭!!');
+		});
+
+		btnAddtion.addEventListener('click', function () {
+			subSidebar.innerHTML = '<iframe class="vh-100" src="http://localhost:8080/addition"></iframe>';
+			recordCoords();
+		});
+
+		btnMod.addEventListener('click', function () {
+			subSidebar.innerHTML = '<iframe class="vh-100" src="http://localhost:8080/mod"></iframe>';
+		});
+
+		btnLan.addEventListener('click', function () {
+			alert('언어선택 클릭!!');
+		});
+
+		btnNotice.addEventListener('click', function () {
+			subSidebar.innerHTML = '<iframe class="vh-100" src="http://localhost:8080/notice"></iframe>';
+		});
+
+		btnOpinion.addEventListener('click', function () {
+			alert('의견보내기 클릭!!');
+		});
+
+		btnEtc.addEventListener('click', function () {
+			subSidebar.innerHTML = '<iframe class="vh-100" src="http://localhost:8080/etc"></iframe>';
+		});
+	}
+
 	let map = document.querySelector('#map');
+
+	// 현재 위치로 center 잡기(예정)
 
 	showMap();
 	function showMap() {
@@ -121,51 +182,98 @@
 		map = new naver.maps.Map('map', mapOptions);
 	}
 
-	showPath();
-	function showPath() {
+	function recordCoords() {
+		let i = 0;
+		let polylinePaths = new Array();
+		let markers = new Array();
 
-		var polylinePath = [
-			new naver.maps.LatLng(37.43415803702095, 126.902749102498),
-			new naver.maps.LatLng(37.43426675615875, 126.90347775123666),
-			new naver.maps.LatLng(37.43409105363888, 126.90347232734511 ),
-			new naver.maps.LatLng(37.43387292643604, 126.90673801889157),
-			new naver.maps.LatLng(37.43373114126552, 126.90689638053485),
-			new naver.maps.LatLng(37.43317902437243, 126.90658634471977),
-		];
+		const iframe = document.querySelector('iframe');
 
-		//위의 배열을 이용해 라인 그리기
-		var polyline = new naver.maps.Polyline({
-			path: polylinePath,      //선 위치 변수배열
-			strokeColor: '#FF0000', //선 색 빨강 #빨강,초록,파랑
-			strokeOpacity: 0.5, //선 투명도 0 ~ 1
-			strokeWeight: 3,   //선 두께
-			map: map           //오버레이할 지도
+		iframe.addEventListener('load', function () {
+			const doc = iframe.contentDocument;
+			const coords = doc.querySelector('#coords');
+
+			naver.maps.Event.addListener(map, 'click', function (event) {
+
+				const lat = event.coord.lat();
+				const lng = event.coord.lng();
+				const position = new naver.maps.LatLng(lat, lng);
+				polylinePaths.push(position);
+
+				// adding markers
+				const marker = new naver.maps.Marker({
+					position: position,
+					map: map,
+					clickable: true,
+				});
+				markers.push(marker);
+
+				// drawing lines
+				const polyline = new naver.maps.Polyline({
+					map: map,
+					path: polylinePaths,
+					strokeWeight: 3,
+					strokeOpacity: 0.5,
+					strokeColor: '#FF0000',
+				});
+				console.log(polyline.path._array);
+
+				// recording in the sidebar
+				coords.innerHTML += '<div class="coord">'
+					+ '<span class="coord_num">' + ++i + '. </span>'
+					+ '<span class="coord_lat">' + lat + '</span>'
+					+ '<span> / </span>'
+					+ '<span class="coord_lag">' + lng + '</span>'
+					+ '</div>';
+
+				// deleting markers
+				let flag = false;
+				for (let i = 0; i < markers.length; i++) {
+					if (flag)
+						break;
+
+					naver.maps.Event.addListener(markers[i], 'click', function () {
+						markers[i].setMap(null);
+						polyline.setMap(null);
+						polyline.path._array.splice(i, 1);
+						console.log('check_delete');
+						console.log(polyline.path._array);
+						flag = true;
+					});
+
+				}
+			});
 		});
 
-		// 배열 마지막 위치를 마크로 표시함
-		var marker = new naver.maps.Marker({
-			position: polylinePath[polylinePath.length - 1], //마크 표시할 위치 배열의 마지막 위치
-			map: map
+		// initializing a path
+		// saving a path
+
+	}
+
+	toggleSidebar();
+	function toggleSidebar() {
+		const subSidebar = document.querySelector('#sub_sidebar');
+		const btnToggling = document.querySelector('#btn_toggling');
+
+		btnToggling.addEventListener('click', function () {
+
+			if (subSidebar.classList.contains('opened')) {
+
+				subSidebar.classList.replace('opened', 'closed');
+				subSidebar.style.width = '0rem';
+				btnToggling.innerHTML = '<i class="bi bi-caret-right"></i>';
+
+			} else {
+
+				subSidebar.classList.replace('closed', 'opened');
+				subSidebar.style.width = '40rem';
+				btnToggling.innerHTML = '<i class="bi bi-caret-left"></i>';
+
+			}
+
 		});
+
 	}
-
-	function success(pos) {
-		const crd = pos.coords;
-		const latitude = crd.latitude;   // latitude
-		const longitude = crd.longitude; // longitude
-
-		console.log(`위도: ${latitude}, 경도: ${longitude}`);
-	}
-
-	getUserLocation();
-	function getUserLocation() {
-		if (!navigator.geolocation) {
-			throw "위치 정보가 지원되지 않습니다.";
-		}
-		navigator.geolocation.getCurrentPosition(success);
-	}
-
-
 </script>
 
 </html>
