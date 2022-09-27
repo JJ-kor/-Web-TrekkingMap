@@ -1,7 +1,6 @@
 package com.example.TrekkingMap.Entity;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
@@ -26,15 +25,10 @@ public class Map {
 	private Double distance;
 
 	@OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
-	private List<MemberMap> memberMaps;
+	private Set<MemberMap> memberMaps = new HashSet<>();
 
 	@OneToMany(mappedBy = "map", fetch = FetchType.EAGER)
-	private Set<Coord> coords = new HashSet<>();
-
-	@OneToMany(mappedBy = "map", fetch = FetchType.EAGER)
-	private Set<Photo> photos = new HashSet<>();
-
-	private Boolean isCompleted;
+	private Set<Coord> coords = new HashSet<>();;
 
 	public Long getIdAuto() {
 		return idAuto;
@@ -76,11 +70,11 @@ public class Map {
 		this.distance = distance;
 	}
 
-	public List<MemberMap> getMemberMaps() {
+	public Set<MemberMap> getMemberMaps() {
 		return memberMaps;
 	}
 
-	public void setMemberMaps(List<MemberMap> memberMaps) {
+	public void setMemberMaps(Set<MemberMap> memberMaps) {
 		this.memberMaps = memberMaps;
 	}
 
@@ -90,22 +84,6 @@ public class Map {
 
 	public void setCoords(Set<Coord> coords) {
 		this.coords = coords;
-	}
-
-	public Set<Photo> getPhotos() {
-		return photos;
-	}
-
-	public void setPhotos(Set<Photo> photos) {
-		this.photos = photos;
-	}
-
-	public Boolean getIsCompleted() {
-		return isCompleted;
-	}
-
-	public void setIsCompleted(Boolean isCompleted) {
-		this.isCompleted = isCompleted;
 	}
 
 }

@@ -4,12 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.TrekkingMap.Repository.PhotoRepository;
+import com.example.TrekkingMap.Repository.PostRepository;
 
 @Service
 @Transactional
-public class PhotoService {
+public class PostService {
 
 	@Autowired
-	PhotoRepository photoRepository;
+	PostRepository postRepository;
 }
+

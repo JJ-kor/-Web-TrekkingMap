@@ -3,9 +3,9 @@ package com.example.TrekkingMap.Repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.example.TrekkingMap.Entity.Photo;
+import com.example.TrekkingMap.Entity.Post;
 
 @Repository
-public interface PhotoRepository extends JpaRepository<Photo, Long>{
+public interface PostRepository extends JpaRepository<Post, Long> {
 
 }

@@ -217,30 +217,31 @@
 					strokeColor: '#FF0000',
 				});
 				console.log(polyline.path._array);
+				console.log(markers);
 
-				// recording in the sidebar
-				coords.innerHTML += '<div class="coord">'
-					+ '<span class="coord_num">' + ++i + '. </span>'
-					+ '<span class="coord_lat">' + lat + '</span>'
-					+ '<span> / </span>'
-					+ '<span class="coord_lag">' + lng + '</span>'
-					+ '</div>';
+				// // recording in the sidebar
+				// coords.innerHTML += '<div class="coord">'
+				// 	+ '<span class="coord_num">' + ++i + '. </span>'
+				// 	+ '<span class="coord_lat">' + lat + '</span>'
+				// 	+ '<span> / </span>'
+				// 	+ '<span class="coord_lag">' + lng + '</span>'
+				// 	+ '</div>';
 
 				// deleting markers
-				let flag = false;
 				for (let i = 0; i < markers.length; i++) {
-					if (flag)
-						break;
-
-					naver.maps.Event.addListener(markers[i], 'click', function () {
-						markers[i].setMap(null);
+					naver.maps.Event.once(markers[i], 'click', function () {
+						if (markers[i] !== undefined) {
+							markers[i].setMap(null);
+						}
+						markers.splice(i, 1);
 						polyline.setMap(null);
 						polyline.path._array.splice(i, 1);
+						i--;
+				
 						console.log('check_delete');
 						console.log(polyline.path._array);
-						flag = true;
+						console.log(markers);
 					});
-
 				}
 			});
 		});

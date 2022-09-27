@@ -1,6 +1,7 @@
 package com.example.TrekkingMap.Entity;
 
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,7 +31,10 @@ public class Member {
 	private String phone;
 
 	@OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
-	private List<MemberMap> memberMaps;
+	private Set<Post> posts = new HashSet<>();
+
+	@OneToMany(mappedBy = "member", fetch = FetchType.EAGER)
+	private Set<MemberMap> memberMaps = new HashSet<>();
 
 	public Long getIdAuto() {
 		return idAuto;
@@ -96,11 +100,19 @@ public class Member {
 		this.phone = phone;
 	}
 
-	public List<MemberMap> getMemberMaps() {
+	public Set<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(Set<Post> posts) {
+		this.posts = posts;
+	}
+
+	public Set<MemberMap> getMemberMaps() {
 		return memberMaps;
 	}
 
-	public void setMemberMaps(List<MemberMap> memberMaps) {
+	public void setMemberMaps(Set<MemberMap> memberMaps) {
 		this.memberMaps = memberMaps;
 	}
 

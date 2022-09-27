@@ -7,11 +7,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>테스트</title>
     <style>
-        #click_area{
+        #click_area {
             background-color: yellowgreen;
-            width:200px;
-            height:200px;
-        }        
+            width: 200px;
+            height: 200px;
+        }
     </style>
 </head>
 
@@ -23,10 +23,15 @@
 
     const clickArea = document.querySelector('#click_area');
 
-    for(let i=0; i<10; i++) {
-        clickArea.addEventListener('click', function(){
-            console.log(i);
-        });
+    for (let i = 0; i < 10; i++) {
+        if (i === 3) {
+            (function () {
+                clickArea.addEventListener('click', function () {
+                    console.log(i);
+                });
+            }())
+        }
+
     }
 
 </script>
