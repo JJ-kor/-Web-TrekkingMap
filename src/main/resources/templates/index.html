@@ -227,8 +227,13 @@
 				// 	+ '<span class="coord_lag">' + lng + '</span>'
 				// 	+ '</div>';
 
+<<<<<<< Updated upstream
 				// deleting markers
 				for (let i = 0; i < markers.length; i++) {
+=======
+				for (let i = 0; i < markers.length; i++) {
+					// deleting markers
+>>>>>>> Stashed changes
 					naver.maps.Event.once(markers[i], 'click', function () {
 						if (markers[i] !== undefined) {
 							markers[i].setMap(null);
@@ -237,17 +242,63 @@
 						polyline.setMap(null);
 						polyline.path._array.splice(i, 1);
 						i--;
+<<<<<<< Updated upstream
 				
 						console.log('check_delete');
 						console.log(polyline.path._array);
 						console.log(markers);
 					});
+=======
+
+						console.log('check_delete');
+						console.log(polyline.path._array);
+					});
+
+					// setting markers
+					const contentString = '<div class="d-flex flex-column justify-content-center bg-light">'
+						+ '<div>isPhotoZone</div>'
+						+ '<input class="form-control m-2" placeholder="이름" style="width:200px;"></input>'
+						+ '<input class="form-control m-2" placeholder="경로" style="width:200px;"></input>'
+						+ '<input class="form-control m-2" placeholder="주소" style="width:200px;"></input>'
+						+ '<button class="btn btn-sm btn-outline-primary m-2">저장하기</button>'
+						+ '</div>';
+
+					const infowindow = new naver.maps.InfoWindow({
+						content: contentString,
+					});
+
+					naver.maps.Event.addListener(markers[i], 'rightclick', function (e) {
+						if (infowindow.getMap()) {
+							infowindow.close();
+						} else {
+							infowindow.open(map, marker);
+						}
+					});
+>>>>>>> Stashed changes
 				}
+			});
+
+			// initializing a path
+			const btnInit = doc.querySelector('#btn_init');
+			btnInit.addEventListener('click', function () {
+				polylinePaths = new Array();
+				markers = new Array();
+
+				showMap();
+				const subSidebar = document.querySelector('#sub_sidebar');
+				subSidebar.innerHTML = '<iframe class="vh-100" src="http://localhost:8080/addition"></iframe>';
+				recordCoords();
+			});
+
+
+			// saving a path
+			const btnSave = doc.querySelector('#btn_save');
+			btnSave.addEventListener('click', function () {
+				alert('저장되었습니다.');
 			});
 		});
 
-		// initializing a path
-		// saving a path
+
 
 	}
 
