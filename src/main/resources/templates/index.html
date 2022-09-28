@@ -120,7 +120,8 @@
 <script th:src="@{/js/bootstrap.min.js}" src="../static/js/bootstrap.min.js"></script>
 <!-- Naver Map -->
 <script type="text/javascript" src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=1ii3n95wii"></script>
-<script>
+<script th:inline="javascript">
+	/*<![CDATA[*/
 	clickSidebar();
 	function clickSidebar() {
 		const btnMain = document.querySelector('#btn_main');
@@ -186,12 +187,12 @@
 		let i = 0;
 		let polylinePaths = new Array();
 		let markers = new Array();
+		let markerDTOs = new Array();
 
 		const iframe = document.querySelector('iframe');
 
 		iframe.addEventListener('load', function () {
 			const doc = iframe.contentDocument;
-			const coords = doc.querySelector('#coords');
 
 			naver.maps.Event.addListener(map, 'click', function (event) {
 
@@ -200,13 +201,29 @@
 				const position = new naver.maps.LatLng(lat, lng);
 				polylinePaths.push(position);
 
-				// adding markers
+				// adding a marker
 				const marker = new naver.maps.Marker({
 					position: position,
 					map: map,
 					clickable: true,
 				});
 				markers.push(marker);
+
+				// adding a merkerDTO
+				let markerDTO = new Object();
+				let seq = 0;
+				if (markerDTOs.length === 0) {
+					markerDTO.seq = 0;
+				} else {
+					markerDTO.seq = markerDTOs.length;
+				}
+				markerDTO.lat = marker.position._lat;
+				markerDTO.lan = marker.position._lng;
+				markerDTO.isPhotoZone = false;
+				markerDTO.name = null;
+				markerDTO.path = null;
+				markerDTO.address = null;
+				markerDTOs.push(markerDTO);
 
 				// drawing lines
 				const polyline = new naver.maps.Polyline({
@@ -217,64 +234,86 @@
 					strokeColor: '#FF0000',
 				});
 				console.log(polyline.path._array);
-				console.log(markers);
 
-				// // recording in the sidebar
-				// coords.innerHTML += '<div class="coord">'
-				// 	+ '<span class="coord_num">' + ++i + '. </span>'
-				// 	+ '<span class="coord_lat">' + lat + '</span>'
-				// 	+ '<span> / </span>'
-				// 	+ '<span class="coord_lag">' + lng + '</span>'
-				// 	+ '</div>';
-
-<<<<<<< Updated upstream
-				// deleting markers
 				for (let i = 0; i < markers.length; i++) {
-=======
-				for (let i = 0; i < markers.length; i++) {
-					// deleting markers
->>>>>>> Stashed changes
-					naver.maps.Event.once(markers[i], 'click', function () {
+					// deleting a marker
+					naver.maps.Event.addListener(markers[i], 'click', function () {
 						if (markers[i] !== undefined) {
 							markers[i].setMap(null);
 						}
 						markers.splice(i, 1);
 						polyline.setMap(null);
 						polyline.path._array.splice(i, 1);
+						markerDTOs.splice(i, 1);
 						i--;
-<<<<<<< Updated upstream
-				
-						console.log('check_delete');
-						console.log(polyline.path._array);
-						console.log(markers);
-					});
-=======
-
 						console.log('check_delete');
 						console.log(polyline.path._array);
 					});
 
-					// setting markers
-					const contentString = '<div class="d-flex flex-column justify-content-center bg-light">'
-						+ '<div>isPhotoZone</div>'
-						+ '<input class="form-control m-2" placeholder="이름" style="width:200px;"></input>'
-						+ '<input class="form-control m-2" placeholder="경로" style="width:200px;"></input>'
-						+ '<input class="form-control m-2" placeholder="주소" style="width:200px;"></input>'
-						+ '<button class="btn btn-sm btn-outline-primary m-2">저장하기</button>'
+					// opening a marker setting info
+					const contentString = '<div class="d-flex flex-column justify-content-center bg-light p-3">'
+						+ '<div class="d-flex justify-content-between mb-3">'
+						+ '<span class="form-check form-switch mt-3" >'
+						+ '<input type="checkbox" class="form-check-input" id="btn_isPhotoZone">'
+						+ '</span>'
+						+ '<i class="bi bi-x" id="btn_close"><a></a></i>'
+						+ '</div>'
+						+ '<input type="text" class="form-control mb-3" placeholder="이름" id="input_name_coord" style="width:200px;"></input>'
+						+ '<input type="text" class="form-control mb-3" placeholder="사진경로" id="input_path" style="width:200px;"></input>'
+						+ '<input type="text" class="form-control mb-3" placeholder="주소" id="input_address" style="width:200px;"></input>'
+						+ '<button class="btn btn-sm btn-primary" id="btn_save_coord" text-center" disabled>저장하기</button>'
 						+ '</div>';
 
-					const infowindow = new naver.maps.InfoWindow({
+					const infoWindow = new naver.maps.InfoWindow({
 						content: contentString,
+						borderWidth: 0,
 					});
 
+					// setting a marker
 					naver.maps.Event.addListener(markers[i], 'rightclick', function (e) {
-						if (infowindow.getMap()) {
-							infowindow.close();
+
+						if (infoWindow.getMap()) {
+							infoWindow.close();
 						} else {
-							infowindow.open(map, marker);
+							infoWindow.open(map, marker);
+
+							const btnIsPhotoZone = document.querySelector('#btn_isPhotoZone');
+							const inputNameCoord = document.querySelector('#input_name_coord');
+							const inputPath = document.querySelector('#input_path');
+							const inputAddress = document.querySelector('#input_address');
+							const btnSaveCoord = document.querySelector('#btn_save_coord');
+
+							btnIsPhotoZone.addEventListener('change', function (event) {
+								if (event.target.checked) {
+									markers[i].setIcon(/*[[@{/images/marker_selected.png}]]*/);
+									markerDTOs[i].isPhotoZone = true;
+									btnSaveCoord.removeAttribute('disabled');
+								} else {
+									markers[i].setIcon(null);
+									markerDTOs[i].isPhotoZone = false;
+									btnSaveCoord.setAttribute('disabled', 'true');
+								}
+							});
+
+							btnSaveCoord.addEventListener('click', function () {
+								markerDTOs[i].name = inputNameCoord.value;
+								markerDTOs[i].path = inputPath.value;
+								markerDTOs[i].address = inputAddress.value;
+								console.log(markerDTOs[i]);
+							});
+
+
+							const btnClose = document.querySelector('#btn_close');
+							btnClose.addEventListener('mouseover', function () {
+								btnClose.style.cursor = 'pointer';
+							});
+
+							btnClose.addEventListener('click', function () {
+								infoWindow.close();
+							});
 						}
 					});
->>>>>>> Stashed changes
+
 				}
 			});
 
@@ -293,8 +332,29 @@
 
 			// saving a path
 			const btnSave = doc.querySelector('#btn_save');
+			const inputName = doc.querySelector('#input_name');
+			const inputStart = doc.querySelector('#input_start');
+			const inputDest = doc.querySelector('#input_dest');
+			const inputDist = doc.querySelector('#input_dist');
+
 			btnSave.addEventListener('click', function () {
 				alert('저장되었습니다.');
+				const url = 'http://localhost:8080/addition'
+				fetch(url, {
+					method: 'post',
+					headers: {
+						"Content-Type": "application/json",
+					},
+					body: JSON.stringify({
+						name: inputName.value,
+						start: inputStart.value,
+						dest: inputDest.value,
+						dist: inputDest.value,
+						routes: markerDTOs
+					}),
+				})
+				.then(response => console.log(response))
+				.catch(error => consolke.log(error));
 			});
 		});
 
@@ -326,6 +386,7 @@
 		});
 
 	}
+	/*]]>*/
 </script>
 
 </html>

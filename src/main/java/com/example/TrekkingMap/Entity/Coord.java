@@ -18,8 +18,8 @@ public class Coord {
 	private Long idAuto;
 
 	private Integer seq;
-	private Long lat;
-	private Long lan;
+	private Double lat;
+	private Double lan;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "MAP_ID")
@@ -41,19 +41,19 @@ public class Coord {
 		this.seq = seq;
 	}
 
-	public Long getLat() {
+	public Double getLat() {
 		return lat;
 	}
 
-	public void setLat(Long lat) {
+	public void setLat(Double lat) {
 		this.lat = lat;
 	}
 
-	public Long getLan() {
+	public Double getLan() {
 		return lan;
 	}
 
-	public void setLan(Long lan) {
+	public void setLan(Double lan) {
 		this.lan = lan;
 	}
 
@@ -63,6 +63,11 @@ public class Coord {
 
 	public void setMap(Map map) {
 		this.map = map;
+	}
+
+	@Override
+	public String toString() {
+		return "Coord [idAuto=" + idAuto + ", seq=" + seq + ", lat=" + lat + ", lan=" + lan + ", map=" + map + "]";
 	}
 
 }
